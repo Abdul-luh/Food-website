@@ -14,8 +14,7 @@ import { FaWallet, FaUserFriends } from "react-icons/fa";
 import { logIn, logOut, toggleModerator } from "@/redux/features/authSlice";
 import { AiFillProfile } from "react-icons/ai";
 import { useDispatch } from "react-redux";
-import { useAppDispatch } from "@/redux/store";
-import { useAppSelector } from "@/redux/store";
+import { AppDispatch, useAppSelector } from "@/redux/store";
 
 export default function Navbar() {
 	const [mobileNav, setMobileNav] = useState(false);
@@ -25,7 +24,7 @@ export default function Navbar() {
 	};
 
 	const [userName, setUserName] = useState("");
-	const dispatch = useDispatch<useAppDispatch>();
+	const dispatch = useDispatch<AppDispatch>();
 
 	const username = useAppSelector((state) => state.AuthReducer.value.username);
 	const isAuth = useAppSelector((state) => state.AuthReducer.value.isAuth);
