@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 import {
 	AiOutlineMenu,
 	AiOutlineClose,
@@ -10,12 +11,33 @@ import { BsFillCartFill, BsFillSaveFill } from "react-icons/bs";
 import { TbTruckDelivery } from "react-icons/tb";
 import { MdFavorite, MdHelp } from "react-icons/md";
 import { FaWallet, FaUserFriends } from "react-icons/fa";
+import { logIn, logOut, toggleModerator } from "@/redux/features/authSlice";
+import { AiFillProfile } from "react-icons/ai";
+import { useDispatch } from "react-redux";
+import { useAppDispatch } from "@/redux/store";
+import { useAppSelector } from "@/redux/store";
 
 export default function Navbar() {
 	const [mobileNav, setMobileNav] = useState(false);
 
 	const handleNav = () => {
 		setMobileNav(!mobileNav);
+	};
+
+	const [userName, setUserName] = useState("");
+	const dispatch = useDispatch<useAppDispatch>();
+
+	const username = useAppSelector((state) => state.AuthReducer.value.username);
+	const isAuth = useAppSelector((state) => state.AuthReducer.value.isAuth);
+
+	const handleLogin = () => {
+		dispatch(logIn(userName));
+	};
+	const handleToggleModerator = () => {
+		dispatch(toggleModerator());
+	};
+	const handleLogout = () => {
+		dispatch(logOut());
 	};
 	return (
 		<div className="max-w-[1200px] mx-auto flex justify-between items-center  p-4">
@@ -79,35 +101,65 @@ export default function Navbar() {
 					Best <span className="font-bold">Eats</span>
 				</h2>
 				<nav>
-					<ul className="flex- flex-col p-4 text-gray-700">
-						<li className="text-xl py-4 flex items-center">
+					<ul className="flex flex-col p-4 text-gray-700">
+						{username && (
+							<Link href="/login">
+								<li className="text-xl py-4 flex items-center">
+									<TbTruckDelivery onClick={handleLogout} className="mr-4" />
+									Login
+								</li>
+							</Link>
+						)}
+						{/* : (
+							<Link href={"/signup"}>
+								<li className="text-xl py-4 flex items-center">
+									<TbTruckDelivery className="mr-4" />
+									Signup
+								</li>
+							</Link>
+						// ) */}
+
+						<li className="text-xl py-4 flex items-center capitalize">
 							<TbTruckDelivery className="mr-4" />
 							Orders
 						</li>
-						<li className="text-xl py-4 flex items-center">
+						<li className="text-xl py-4 flex items-center capitalize">
 							<MdFavorite className="mr-4" />
 							Favourites
 						</li>
-						<li className="text-xl py-4 flex items-center">
+						<li className="text-xl py-4 flex items-center capitalize">
 							<FaWallet className="mr-4" />
 							Wallet
 						</li>
-						<li className="text-xl py-4 flex items-center">
+						<li className="text-xl py-4 flex items-center capitalize">
 							<MdHelp className="mr-4" />
 							Help
 						</li>
-						<li className="text-xl py-4 flex items-center">
+						{/* <li className="text-xl py-4 flex items-center">
 							<AiFillTag className="mr-4" />
 							Promotions
-						</li>
-						<li className="text-xl py-4 flex items-center">
+						</li> */}
+						<li className="text-xl py-4 flex items-center capitalize">
 							<BsFillSaveFill className="mr-4" />
 							Best One
 						</li>
-						<li className="text-xl py-4 flex items-center">
-							<FaUserFriends className="mr-4" />
-							Invite Friends
+						<li className="text-xl py-4 flex items-center capitalize">
+							<AiFillProfile className="mr-4" />
+							Login
 						</li>
+
+						{username && (
+							<>
+								<li className="text-xl py-4 flex items-center capitalize">
+									<FaUserFriends className="mr-4" />
+									Invite Friends
+								</li>
+								<li className="text-xl py-4 flex items-center capitalize">
+									<FaUserFriends className="mr-4" />
+									Logout
+								</li>
+							</>
+						)}
 					</ul>
 				</nav>
 			</div>
